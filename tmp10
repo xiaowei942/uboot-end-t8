@@ -1,0 +1,640 @@
+/*								/*
+ * (C) Copyright 2002						 * (C) Copyright 2002
+ * Sysgo Real-Time Solutions, GmbH <www.elinos.com>		 * Sysgo Real-Time Solutions, GmbH <www.elinos.com>
+ * Marius Groeger <mgroeger@sysgo.de>				 * Marius Groeger <mgroeger@sysgo.de>
+ * Gary Jennejohn <gj@denx.de>					 * Gary Jennejohn <gj@denx.de>
+ * David Mueller <d.mueller@elsoft.ch>				 * David Mueller <d.mueller@elsoft.ch>
+ *								 *
+ * Configuation settings for the SAMSUNG SMDK6400(mDirac-III)	 * Configuation settings for the SAMSUNG SMDK6400(mDirac-III)
+ *								 *
+ * See file CREDITS for list of people who contributed to thi	 * See file CREDITS for list of people who contributed to thi
+ * project.							 * project.
+ *								 *
+ * This program is free software; you can redistribute it and	 * This program is free software; you can redistribute it and
+ * modify it under the terms of the GNU General Public Licens	 * modify it under the terms of the GNU General Public Licens
+ * published by the Free Software Foundation; either version 	 * published by the Free Software Foundation; either version 
+ * the License, or (at your option) any later version.		 * the License, or (at your option) any later version.
+ *								 *
+ * This program is distributed in the hope that it will be us	 * This program is distributed in the hope that it will be us
+ * but WITHOUT ANY WARRANTY; without even the implied warrant	 * but WITHOUT ANY WARRANTY; without even the implied warrant
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See 	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See 
+ * GNU General Public License for more details.			 * GNU General Public License for more details.
+ *								 *
+ * You should have received a copy of the GNU General Public 	 * You should have received a copy of the GNU General Public 
+ * along with this program; if not, write to the Free Softwar	 * along with this program; if not, write to the Free Softwar
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,	 * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ * MA 02111-1307 USA						 * MA 02111-1307 USA
+ */								 */
+
+#ifndef __CONFIG_H						#ifndef __CONFIG_H
+#define __CONFIG_H						#define __CONFIG_H
+
+//#define FPGA_SMDKC110					      <
+							      <
+/*								/*
+ * High Level Configuration Options				 * High Level Configuration Options
+ * (easy to change)						 * (easy to change)
+ */								 */
+#define CONFIG_S5PC110		1		/* in a SAMSU	#define CONFIG_S5PC110		1		/* in a SAMSU
+#define CONFIG_S5PC11X		1		/* in a SAMSU	#define CONFIG_S5PC11X		1		/* in a SAMSU
+#define CONFIG_SMDKC110		1				#define CONFIG_SMDKC110		1
+
+#define CONFIG_MCP_SINGLE	1				#define CONFIG_MCP_SINGLE	1
+#define CONFIG_EVT1		1		/* EVT1 */	#define CONFIG_EVT1		1		/* EVT1 */
+//#define CONFIG_SMDKV210_REV02	1	/* Rev 0.2 and PMIC T |
+							      >	#define CONFIG_MANGO210		1
+
+#define CONFIG_FASTBOOT		1				#define CONFIG_FASTBOOT		1
+//#define CONFIG_FUSED		1		/* Fused chip	//#define CONFIG_FUSED		1		/* Fused chip
+//#define CONFIG_SECURE_BOOT	1		/* secure boo |	//#define CONFIG_SECURE		1		/* secure boo
+							      <
+#define CONFIG_SW_WORKAROUND	1		/* Software a <
+#if defined(CONFIG_SW_WORKAROUND)			      <
+#define CONFIG_CHECK_MPLL_LOCK	1		/* Check MPLL <
+#endif							      <
+							      <
+							      <
+#if defined(CONFIG_SECURE_BOOT)				      <
+#define CONFIG_SECURE_KERNEL_BASE	0x20008000	      <
+#define CONFIG_SECURE_KERNEL_SIZE	0x00271000	      <
+#define CONFIG_SECURE_ROOTFS_BASE	0x30A00000	      <
+#define CONFIG_SECURE_ROOTFS_SIZE	0x0013D000	      <
+#endif							      <
+
+#define BOOT_ONENAND		0x1				#define BOOT_ONENAND		0x1
+#define BOOT_NAND		0x2				#define BOOT_NAND		0x2
+#define BOOT_MMCSD		0x3				#define BOOT_MMCSD		0x3
+#define BOOT_NOR		0x4				#define BOOT_NOR		0x4
+#define BOOT_SEC_DEV		0x5				#define BOOT_SEC_DEV		0x5
+
+/* skip to load BL2 */						/* skip to load BL2 */
+//#define FAST_BOOT		1				//#define FAST_BOOT		1
+
+#define MEMORY_BASE_ADDRESS	0x20000000		      |	#undef CONFIG_ENABLE_MMU
+							      >
+							      >	#ifdef CONFIG_ENABLE_MMU
+							      >	#define MEMORY_BASE_ADDRESS		0xc0000000
+							      >	#else
+							      >	#define MEMORY_BASE_ADDRESS		0x20000000
+							      >	#define MEMORY_BASE_ADDRESS2		0x40000000
+							      >	#endif
+
+/* input clock of PLL */					/* input clock of PLL */
+#define CONFIG_SYS_CLK_FREQ	24000000	/* the SMDK64	#define CONFIG_SYS_CLK_FREQ	24000000	/* the SMDK64
+
+#define CONFIG_ENABLE_MMU				      <
+							      <
+#ifdef CONFIG_ENABLE_MMU					#ifdef CONFIG_ENABLE_MMU
+#define virt_to_phys(x)	virt_to_phy_smdkc110(x)			#define virt_to_phys(x)	virt_to_phy_smdkc110(x)
+#else								#else
+#define virt_to_phys(x)	(x)					#define virt_to_phys(x)	(x)
+#endif								#endif
+
+#define CONFIG_MEMORY_UPPER_CODE				#define CONFIG_MEMORY_UPPER_CODE
+
+#undef CONFIG_USE_IRQ				/* we don't n	#undef CONFIG_USE_IRQ				/* we don't n
+
+#define CONFIG_INCLUDE_TEST					#define CONFIG_INCLUDE_TEST
+
+#define CONFIG_ZIMAGE_BOOT					#define CONFIG_ZIMAGE_BOOT
+#define CONFIG_IMAGE_BOOT					#define CONFIG_IMAGE_BOOT
+
+#define BOARD_LATE_INIT						#define BOARD_LATE_INIT
+
+#define CONFIG_SETUP_MEMORY_TAGS				#define CONFIG_SETUP_MEMORY_TAGS
+#define CONFIG_CMDLINE_TAG					#define CONFIG_CMDLINE_TAG
+#define CONFIG_INITRD_TAG					#define CONFIG_INITRD_TAG
+
+/*								/*
+ * Architecture magic and machine type				 * Architecture magic and machine type
+ */								 */
+
+#define MACH_TYPE		2456				#define MACH_TYPE		2456
+
+#define UBOOT_MAGIC		(0x43090000 | MACH_TYPE)	#define UBOOT_MAGIC		(0x43090000 | MACH_TYPE)
+
+/* Power Management is enabled */				/* Power Management is enabled */
+#define CONFIG_PM						#define CONFIG_PM
+
+#define CONFIG_DISPLAY_CPUINFO					#define CONFIG_DISPLAY_CPUINFO
+#define CONFIG_DISPLAY_BOARDINFO				#define CONFIG_DISPLAY_BOARDINFO
+
+#undef CONFIG_SKIP_RELOCATE_UBOOT				#undef CONFIG_SKIP_RELOCATE_UBOOT
+#undef CONFIG_USE_NOR_BOOT					#undef CONFIG_USE_NOR_BOOT
+
+/*								/*
+ * Size of malloc() pool					 * Size of malloc() pool
+ */								 */
+#define CFG_MALLOC_LEN		(CFG_ENV_SIZE + 896*1024)     |	#define CFG_MALLOC_LEN		(CFG_ENV_SIZE + 1024*1024)
+							      >	#define CONFIG_SYS_MALLOC_LEN	(CFG_MALLOC_LEN)
+#define CFG_GBL_DATA_SIZE	128	/* size in bytes rese	#define CFG_GBL_DATA_SIZE	128	/* size in bytes rese
+
+#define CFG_STACK_SIZE		512*1024			#define CFG_STACK_SIZE		512*1024
+
+/*								/*
+ * Hardware drivers					      <
+ */							      <
+//#define DM9000_16BIT_DATA				      <
+							      <
+//#define CONFIG_DRIVER_DM9000	1			      <
+							      <
+//#ifdef CONFIG_DRIVER_DM9000				      <
+//#define CONFIG_DM9000_BASE		(0xA8000000)	      <
+//#define DM9000_IO			(CONFIG_DM9000_BASE)  <
+//#if defined(DM9000_16BIT_DATA)			      <
+//#define DM9000_DATA			(CONFIG_DM9000_BASE+2 <
+//#else							      <
+//#define DM9000_DATA			(CONFIG_DM9000_BASE+1 <
+//#endif						      <
+//#endif						      <
+/*							      <
+ * select serial console configuration				 * select serial console configuration
+ */								 */
+
+#define CONFIG_SERIAL3          1	/* we use UART1 on SM |	#define CONFIG_SERIAL2          1	/* we use UART1 on SM
+
+#define CFG_HUSH_PARSER			/* use "hush" command	#define CFG_HUSH_PARSER			/* use "hush" command
+#ifdef CFG_HUSH_PARSER						#ifdef CFG_HUSH_PARSER
+#define CFG_PROMPT_HUSH_PS2	"> "				#define CFG_PROMPT_HUSH_PS2	"> "
+#endif								#endif
+
+#define CONFIG_CMDLINE_EDITING					#define CONFIG_CMDLINE_EDITING
+
+#undef CONFIG_S3C64XX_I2C		/* this board has H/W <
+#ifdef CONFIG_S3C64XX_I2C				      <
+#define CONFIG_HARD_I2C		1			      <
+#define CFG_I2C_SPEED		50000			      <
+#define CFG_I2C_SLAVE		0xFE			      <
+#endif							      <
+							      <
+#define CONFIG_DOS_PARTITION					#define CONFIG_DOS_PARTITION
+#define CONFIG_SUPPORT_VFAT					#define CONFIG_SUPPORT_VFAT
+
+#define CONFIG_USB_OHCI						#define CONFIG_USB_OHCI
+#undef CONFIG_USB_STORAGE					#undef CONFIG_USB_STORAGE
+#define CONFIG_S3C_USBD						#define CONFIG_S3C_USBD
+
+#define USBD_DOWN_ADDR		0xc0000000		      |	#define USBD_DOWN_ADDR		(MEMORY_BASE_ADDRESS + 0x1000
+
+/************************************************************	/************************************************************
+ * RTC								 * RTC
+ ************************************************************	 ************************************************************
+/* allow to overwrite serial and ethaddr */			/* allow to overwrite serial and ethaddr */
+#define CONFIG_ENV_OVERWRITE					#define CONFIG_ENV_OVERWRITE
+
+#define CONFIG_BAUDRATE		115200				#define CONFIG_BAUDRATE		115200
+
+/***********************************************************	/***********************************************************
+ * Command definition						 * Command definition
+ ***********************************************************/	 ***********************************************************/
+#define CONFIG_CMD_CACHE					#define CONFIG_CMD_CACHE
+#define CONFIG_CMD_USB						#define CONFIG_CMD_USB
+#define CONFIG_CMD_REGINFO					#define CONFIG_CMD_REGINFO
+
+#define	CONFIG_CMD_NAND						#define	CONFIG_CMD_NAND
+#define	CONFIG_CMD_FLASH				      |	#undef	CONFIG_CMD_FLASH
+							      >	#undef	CONFIG_CMD_IMLS
+
+#ifndef FPGA_SMDKC110					      <
+//#define CONFIG_CMD_ONENAND				      <
+#define CONFIG_CMD_MOVINAND					#define CONFIG_CMD_MOVINAND
+#endif							      <
+#define CONFIG_CMD_PING						#define CONFIG_CMD_PING
+#define CONFIG_CMD_DATE						#define CONFIG_CMD_DATE
+
+#include <config_cmd_default.h>					#include <config_cmd_default.h>
+
+#define CONFIG_CMD_ELF						#define CONFIG_CMD_ELF
+#define CONFIG_CMD_DHCP						#define CONFIG_CMD_DHCP
+//#define CONFIG_CMD_I2C				      <
+
+#define CONFIG_CMD_EXT2						#define CONFIG_CMD_EXT2
+#define CONFIG_CMD_FAT						#define CONFIG_CMD_FAT
+
+							      >	#define CONFIG_CMD_UBI
+							      >	#define CONFIG_CMD_MTDPARTS
+							      >
+/*								/*
+ * BOOTP options						 * BOOTP options
+ */								 */
+#define CONFIG_BOOTP_SUBNETMASK					#define CONFIG_BOOTP_SUBNETMASK
+#define CONFIG_BOOTP_GATEWAY					#define CONFIG_BOOTP_GATEWAY
+#define CONFIG_BOOTP_HOSTNAME					#define CONFIG_BOOTP_HOSTNAME
+#define CONFIG_BOOTP_BOOTPATH					#define CONFIG_BOOTP_BOOTPATH
+
+/*#define CONFIG_BOOTARGS    	"root=ramfs devfs=mount conso	/*#define CONFIG_BOOTARGS    	"root=ramfs devfs=mount conso
+#define CONFIG_ETHADDR		00:40:5c:26:0a:5b		#define CONFIG_ETHADDR		00:40:5c:26:0a:5b
+#define CONFIG_NETMASK          255.255.255.0			#define CONFIG_NETMASK          255.255.255.0
+#define CONFIG_IPADDR		192.168.0.20		      |	#define CONFIG_IPADDR		192.168.1.121
+#define CONFIG_SERVERIP		192.168.0.10		      |	#define CONFIG_SERVERIP		192.168.1.2
+#define CONFIG_GATEWAYIP	192.168.0.1		      |	#define CONFIG_GATEWAYIP	192.168.1.1
+
+#define CONFIG_ZERO_BOOTDELAY_CHECK				#define CONFIG_ZERO_BOOTDELAY_CHECK
+
+#define CONFIG_DRIVER_SMC911X	1				#define CONFIG_DRIVER_SMC911X	1
+#define CONFIG_DRIVER_SMC911X_16_BIT				#define CONFIG_DRIVER_SMC911X_16_BIT
+#define CONFIG_DRIVER_SMC911X_BASE	0xA8000000	      |	#define CONFIG_DRIVER_SMC911X_BASE	0x88000000
+							      <
+#define CONFIG_NET_MULTI				      <
+#undef	CONFIG_NET_MULTI				      <
+							      <
+#ifdef CONFIG_NET_MULTI					      <
+#define CONFIG_DRIVER_SMC911X_BASE	0x98800300	      <
+#define CONFIG_DRIVER_SMC911X_16_BIT			      <
+#define CONFIG_DRIVER_CS8900				      <
+#define CS8900_BASE	  		0x18800300	      <
+#define CS8900_BUS16					      <
+#else							      <
+#define CONFIG_DRIVER_SMC911X_16_BIT			      <
+#define CONFIG_DRIVER_SMC911X_BASE	0x98800300	      <
+#undef	CONFIG_DRIVER_CS8900				      <
+#endif							      <
+
+#if defined(CONFIG_CMD_KGDB)					#if defined(CONFIG_CMD_KGDB)
+#define CONFIG_KGDB_BAUDRATE	115200		/* speed to r	#define CONFIG_KGDB_BAUDRATE	115200		/* speed to r
+/* what's this ? it's not used anywhere */			/* what's this ? it's not used anywhere */
+#define CONFIG_KGDB_SER_INDEX	1		/* which seri	#define CONFIG_KGDB_SER_INDEX	1		/* which seri
+#endif								#endif
+
+/*								/*
+ * Miscellaneous configurable options				 * Miscellaneous configurable options
+ */								 */
+#define CFG_LONGHELP				/* undef to s	#define CFG_LONGHELP				/* undef to s
+
+#define CFG_PROMPT              "SMDKV210 # "   /* Monitor Co |	#define CFG_PROMPT              "MANGO210 # "   /* Monitor Co
+
+#define CFG_CBSIZE		256		/* Console I/	#define CFG_CBSIZE		256		/* Console I/
+#define CFG_PBSIZE		384		/* Print Buff	#define CFG_PBSIZE		384		/* Print Buff
+#define CFG_MAXARGS		16		/* max number	#define CFG_MAXARGS		16		/* max number
+#define CFG_BARGSIZE		CFG_CBSIZE	/* Boot Argum	#define CFG_BARGSIZE		CFG_CBSIZE	/* Boot Argum
+
+#define CFG_MEMTEST_START	MEMORY_BASE_ADDRESS	/* me	#define CFG_MEMTEST_START	MEMORY_BASE_ADDRESS	/* me
+
+#define CFG_MEMTEST_END		MEMORY_BASE_ADDRESS + 0x3E000 |	#define CFG_MEMTEST_END		MEMORY_BASE_ADDRESS + 0xFD000
+
+#undef CFG_CLKS_IN_HZ		/* everything, incl board inf	#undef CFG_CLKS_IN_HZ		/* everything, incl board inf
+
+#define CFG_LOAD_ADDR		MEMORY_BASE_ADDRESS	/* de	#define CFG_LOAD_ADDR		MEMORY_BASE_ADDRESS	/* de
+
+/* the PWM TImer 4 uses a counter of 41687 for 10 ms, so we n	/* the PWM TImer 4 uses a counter of 41687 for 10 ms, so we n
+/* it to wrap 100 times (total 4168750) to get 1 sec. */	/* it to wrap 100 times (total 4168750) to get 1 sec. */
+#define CFG_HZ			4168750		// at PCLK 66	#define CFG_HZ			4168750		// at PCLK 66
+
+/* valid baudrates */						/* valid baudrates */
+#define CFG_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 	#define CFG_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 
+
+/*-----------------------------------------------------------	/*-----------------------------------------------------------
+ * Stack sizes							 * Stack sizes
+ *								 *
+ * The stack sizes are set up in start.S using the settings b	 * The stack sizes are set up in start.S using the settings b
+ */								 */
+#define CONFIG_STACKSIZE	0x40000		/* regular st	#define CONFIG_STACKSIZE	0x40000		/* regular st
+#ifdef CONFIG_USE_IRQ						#ifdef CONFIG_USE_IRQ
+#define CONFIG_STACKSIZE_IRQ	(4*1024)	/* IRQ stack 	#define CONFIG_STACKSIZE_IRQ	(4*1024)	/* IRQ stack 
+#define CONFIG_STACKSIZE_FIQ	(4*1024)	/* FIQ stack 	#define CONFIG_STACKSIZE_FIQ	(4*1024)	/* FIQ stack 
+#endif								#endif
+
+//#define CONFIG_CLK_667_166_166_133				//#define CONFIG_CLK_667_166_166_133
+//#define CONFIG_CLK_533_133_100_100				//#define CONFIG_CLK_533_133_100_100
+//#define CONFIG_CLK_800_200_166_133				//#define CONFIG_CLK_800_200_166_133
+//#define CONFIG_CLK_800_100_166_133				//#define CONFIG_CLK_800_100_166_133
+#define CONFIG_CLK_1000_200_166_133				#define CONFIG_CLK_1000_200_166_133
+//#define CONFIG_CLK_400_200_166_133				//#define CONFIG_CLK_400_200_166_133
+//#define CONFIG_CLK_400_100_166_133				//#define CONFIG_CLK_400_100_166_133
+
+#if defined(CONFIG_CLK_667_166_166_133)				#if defined(CONFIG_CLK_667_166_166_133)
+#define APLL_MDIV       0xfa					#define APLL_MDIV       0xfa
+#define APLL_PDIV       0x6					#define APLL_PDIV       0x6
+#define APLL_SDIV       0x1					#define APLL_SDIV       0x1
+#elif defined(CONFIG_CLK_533_133_100_100)			#elif defined(CONFIG_CLK_533_133_100_100)
+#define APLL_MDIV       0x215					#define APLL_MDIV       0x215
+#define APLL_PDIV       0x18					#define APLL_PDIV       0x18
+#define APLL_SDIV       0x1					#define APLL_SDIV       0x1
+#elif defined(CONFIG_CLK_800_200_166_133) || \			#elif defined(CONFIG_CLK_800_200_166_133) || \
+	defined(CONFIG_CLK_800_100_166_133) || \			defined(CONFIG_CLK_800_100_166_133) || \
+	defined(CONFIG_CLK_400_200_166_133) || \			defined(CONFIG_CLK_400_200_166_133) || \
+	defined(CONFIG_CLK_400_100_166_133)				defined(CONFIG_CLK_400_100_166_133)
+#define APLL_MDIV       0x64					#define APLL_MDIV       0x64
+#define APLL_PDIV       0x3					#define APLL_PDIV       0x3
+#define APLL_SDIV       0x1					#define APLL_SDIV       0x1
+#elif defined(CONFIG_CLK_1000_200_166_133)			#elif defined(CONFIG_CLK_1000_200_166_133)
+#define APLL_MDIV       0x7d					#define APLL_MDIV       0x7d
+#define APLL_PDIV       0x3					#define APLL_PDIV       0x3
+#define APLL_SDIV       0x1					#define APLL_SDIV       0x1
+#endif								#endif
+
+#define APLL_LOCKTIME_VAL	0x2cf				#define APLL_LOCKTIME_VAL	0x2cf
+
+#if defined(CONFIG_EVT1)					#if defined(CONFIG_EVT1)
+/* Set AFC value */						/* Set AFC value */
+#define AFC_ON		0x00000000				#define AFC_ON		0x00000000
+#define AFC_OFF		0x10000010				#define AFC_OFF		0x10000010
+#endif								#endif
+
+#if defined(CONFIG_CLK_533_133_100_100)				#if defined(CONFIG_CLK_533_133_100_100)
+#define MPLL_MDIV	0x190					#define MPLL_MDIV	0x190
+#define MPLL_PDIV	0x6					#define MPLL_PDIV	0x6
+#define MPLL_SDIV	0x2					#define MPLL_SDIV	0x2
+#else								#else
+#define MPLL_MDIV	0x29b					#define MPLL_MDIV	0x29b
+#define MPLL_PDIV	0xc					#define MPLL_PDIV	0xc
+#define MPLL_SDIV	0x1					#define MPLL_SDIV	0x1
+#endif								#endif
+
+#define EPLL_MDIV	0x60					#define EPLL_MDIV	0x60
+#define EPLL_PDIV	0x6					#define EPLL_PDIV	0x6
+#define EPLL_SDIV	0x2					#define EPLL_SDIV	0x2
+
+#define VPLL_MDIV	0x6c					#define VPLL_MDIV	0x6c
+#define VPLL_PDIV	0x6					#define VPLL_PDIV	0x6
+#define VPLL_SDIV	0x3					#define VPLL_SDIV	0x3
+
+/* CLK_DIV0 */							/* CLK_DIV0 */
+#define APLL_RATIO	0					#define APLL_RATIO	0
+#define A2M_RATIO	4					#define A2M_RATIO	4
+#define HCLK_MSYS_RATIO	8					#define HCLK_MSYS_RATIO	8
+#define PCLK_MSYS_RATIO	12					#define PCLK_MSYS_RATIO	12
+#define HCLK_DSYS_RATIO	16					#define HCLK_DSYS_RATIO	16
+#define PCLK_DSYS_RATIO 20					#define PCLK_DSYS_RATIO 20
+#define HCLK_PSYS_RATIO	24					#define HCLK_PSYS_RATIO	24
+#define PCLK_PSYS_RATIO 28					#define PCLK_PSYS_RATIO 28
+
+#define CLK_DIV0_MASK	0x7fffffff				#define CLK_DIV0_MASK	0x7fffffff
+
+#define set_pll(mdiv, pdiv, sdiv)	(1<<31 | mdiv<<16 | p	#define set_pll(mdiv, pdiv, sdiv)	(1<<31 | mdiv<<16 | p
+
+#define APLL_VAL	set_pll(APLL_MDIV,APLL_PDIV,APLL_SDIV	#define APLL_VAL	set_pll(APLL_MDIV,APLL_PDIV,APLL_SDIV
+#define MPLL_VAL	set_pll(MPLL_MDIV,MPLL_PDIV,MPLL_SDIV	#define MPLL_VAL	set_pll(MPLL_MDIV,MPLL_PDIV,MPLL_SDIV
+#define EPLL_VAL	set_pll(EPLL_MDIV,EPLL_PDIV,EPLL_SDIV	#define EPLL_VAL	set_pll(EPLL_MDIV,EPLL_PDIV,EPLL_SDIV
+#define VPLL_VAL	set_pll(VPLL_MDIV,VPLL_PDIV,VPLL_SDIV	#define VPLL_VAL	set_pll(VPLL_MDIV,VPLL_PDIV,VPLL_SDIV
+
+#if defined(CONFIG_CLK_667_166_166_133)				#if defined(CONFIG_CLK_667_166_166_133)
+#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(3<<A2M_RATIO)|(3<<H	#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(3<<A2M_RATIO)|(3<<H
+			|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R				|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R
+#elif defined(CONFIG_CLK_533_133_100_100)			#elif defined(CONFIG_CLK_533_133_100_100)
+#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(3<<A2M_RATIO)|(3<<H	#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(3<<A2M_RATIO)|(3<<H
+			|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R				|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R
+#elif defined(CONFIG_CLK_800_200_166_133)			#elif defined(CONFIG_CLK_800_200_166_133)
+#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(3<<A2M_RATIO)|(3<<H	#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(3<<A2M_RATIO)|(3<<H
+			|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R				|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R
+#elif defined(CONFIG_CLK_800_100_166_133)			#elif defined(CONFIG_CLK_800_100_166_133)
+#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(7<<A2M_RATIO)|(7<<H	#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(7<<A2M_RATIO)|(7<<H
+			|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R				|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R
+#elif defined(CONFIG_CLK_400_200_166_133)			#elif defined(CONFIG_CLK_400_200_166_133)
+#define CLK_DIV0_VAL    ((1<<APLL_RATIO)|(3<<A2M_RATIO)|(1<<H	#define CLK_DIV0_VAL    ((1<<APLL_RATIO)|(3<<A2M_RATIO)|(1<<H
+			|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R				|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R
+#elif defined(CONFIG_CLK_400_100_166_133)			#elif defined(CONFIG_CLK_400_100_166_133)
+#define CLK_DIV0_VAL    ((1<<APLL_RATIO)|(7<<A2M_RATIO)|(3<<H	#define CLK_DIV0_VAL    ((1<<APLL_RATIO)|(7<<A2M_RATIO)|(3<<H
+			|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R				|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R
+#elif defined(CONFIG_CLK_1000_200_166_133)			#elif defined(CONFIG_CLK_1000_200_166_133)
+#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(4<<A2M_RATIO)|(4<<H	#define CLK_DIV0_VAL    ((0<<APLL_RATIO)|(4<<A2M_RATIO)|(4<<H
+			|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R				|(3<<HCLK_DSYS_RATIO)|(1<<PCLK_DSYS_R
+#endif								#endif
+
+#define CLK_DIV1_VAL	((1<<16)|(1<<12)|(1<<8)|(1<<4))		#define CLK_DIV1_VAL	((1<<16)|(1<<12)|(1<<8)|(1<<4))
+#define CLK_DIV2_VAL	(1<<0)					#define CLK_DIV2_VAL	(1<<0)
+
+#if defined(CONFIG_CLK_533_133_100_100)				#if defined(CONFIG_CLK_533_133_100_100)
+
+#if defined(CONFIG_MCP_SINGLE)				      <
+							      <
+#define DMC0_TIMINGA_REF	0x40e				#define DMC0_TIMINGA_REF	0x40e
+#define DMC0_TIMING_ROW		0x10233206			#define DMC0_TIMING_ROW		0x10233206
+#define DMC0_TIMING_DATA	0x12130005			#define DMC0_TIMING_DATA	0x12130005
+#define	DMC0_TIMING_PWR		0x0E100222			#define	DMC0_TIMING_PWR		0x0E100222
+
+#define DMC1_TIMINGA_REF	0x40e				#define DMC1_TIMINGA_REF	0x40e
+#define DMC1_TIMING_ROW		0x10233206			#define DMC1_TIMING_ROW		0x10233206
+#define DMC1_TIMING_DATA	0x12130005			#define DMC1_TIMING_DATA	0x12130005
+#define	DMC1_TIMING_PWR		0x0E100222			#define	DMC1_TIMING_PWR		0x0E100222
+
+#else							      <
+							      <
+#error "You should define memory type (AC type or H type or B <
+							      <
+#endif							      <
+							      <
+#elif defined(CONFIG_CLK_800_200_166_133) || \			#elif defined(CONFIG_CLK_800_200_166_133) || \
+	defined(CONFIG_CLK_1000_200_166_133) || \			defined(CONFIG_CLK_1000_200_166_133) || \
+	defined(CONFIG_CLK_800_100_166_133) || \			defined(CONFIG_CLK_800_100_166_133) || \
+	defined(CONFIG_CLK_400_200_166_133) || \			defined(CONFIG_CLK_400_200_166_133) || \
+	defined(CONFIG_CLK_400_100_166_133)				defined(CONFIG_CLK_400_100_166_133)
+
+#if defined(CONFIG_MCP_SINGLE)				      |	#define	DMC0_MEMCONTROL		0x00202400	// MemControl
+							      |	#define DMC0_MEMCONFIG_0	0x20F00313	// MemConfig0
+#define DMC0_MEMCONFIG_0	0x20E01323	// MemConfig0 |	#define DMC0_MEMCONFIG_1	0x00F00313	// MemConfig1
+#define DMC0_MEMCONFIG_1	0x40F01323	// MemConfig1 <
+#define DMC0_TIMINGA_REF	0x00000618	// TimingAref	#define DMC0_TIMINGA_REF	0x00000618	// TimingAref
+#define DMC0_TIMING_ROW		0x28233287	// TimingRow	#define DMC0_TIMING_ROW		0x28233287	// TimingRow
+#define DMC0_TIMING_DATA	0x23240304	// TimingData |	#define DMC0_TIMING_DATA	0x23240304	// TimingData
+#define	DMC0_TIMING_PWR		0x09C80232	// TimingPowe	#define	DMC0_TIMING_PWR		0x09C80232	// TimingPowe
+
+#define	DMC1_MEMCONTROL		0x00202400	// MemControl |	#define	DMC1_MEMCONTROL		0x00202400	// MemControl
+#define DMC1_MEMCONFIG_0	0x40C01323	// MemConfig0 |	#define DMC1_MEMCONFIG_0	0x40F00313	// MemConfig0
+#define DMC1_MEMCONFIG_1	0x00E01323	// MemConfig1 |	#define DMC1_MEMCONFIG_1	0x00F00313	// MemConfig1
+#define DMC1_TIMINGA_REF	0x00000618	// TimingAref	#define DMC1_TIMINGA_REF	0x00000618	// TimingAref
+#define DMC1_TIMING_ROW		0x28233289	// TimingRow	#define DMC1_TIMING_ROW		0x28233289	// TimingRow
+#define DMC1_TIMING_DATA	0x23240304	// TimingData |	#define DMC1_TIMING_DATA	0x23240304	// TimingData
+#define	DMC1_TIMING_PWR		0x08280232	// TimingPowe	#define	DMC1_TIMING_PWR		0x08280232	// TimingPowe
+							      >
+#if defined(CONFIG_CLK_800_100_166_133) || defined(CONFIG_CLK	#if defined(CONFIG_CLK_800_100_166_133) || defined(CONFIG_CLK
+#define DMC0_MEMCONFIG_0	0x20E01323	// MemConfig0 |
+#define DMC0_MEMCONFIG_1	0x40F01323	// MemConfig1 |	#define	DMC0_MEMCONTROL		0x00202400	// MemControl
+							      >	#define DMC0_MEMCONFIG_0	0x20F00313	// MemConfig0
+							      >	#define DMC0_MEMCONFIG_1	0x00F00313	// MemConfig1
+#define DMC0_TIMINGA_REF	0x0000030C	// TimingAref	#define DMC0_TIMINGA_REF	0x0000030C	// TimingAref
+#define DMC0_TIMING_ROW		0x28233287	// TimingRow	#define DMC0_TIMING_ROW		0x28233287	// TimingRow
+#define DMC0_TIMING_DATA	0x23240304	// TimingData	#define DMC0_TIMING_DATA	0x23240304	// TimingData
+#define	DMC0_TIMING_PWR		0x09C80232	// TimingPowe	#define	DMC0_TIMING_PWR		0x09C80232	// TimingPowe
+
+#define	DMC1_MEMCONTROL		0x00202400	// MemControl |	#define	DMC1_MEMCONTROL		0x00202400	// MemControl
+#define DMC1_MEMCONFIG_0	0x40C01323	// MemConfig0 |	#define DMC1_MEMCONFIG_0	0x40F00313	// MemConfig0
+#define DMC1_MEMCONFIG_1	0x00E01323	// MemConfig1 |	#define DMC1_MEMCONFIG_1	0x00F00313	// MemConfig1
+#define DMC1_TIMINGA_REF	0x0000030C	// TimingAref	#define DMC1_TIMINGA_REF	0x0000030C	// TimingAref
+#define DMC1_TIMING_ROW		0x28233289	// TimingRow	#define DMC1_TIMING_ROW		0x28233289	// TimingRow
+#define DMC1_TIMING_DATA	0x23240304	// TimingData	#define DMC1_TIMING_DATA	0x23240304	// TimingData
+#define	DMC1_TIMING_PWR		0x08280232	// TimingPowe	#define	DMC1_TIMING_PWR		0x08280232	// TimingPowe
+#endif								#endif
+
+#else								#else
+
+#error "You should define memory type (AC type or H type)"    <
+							      <
+#endif //						      <
+							      <
+#else							      <
+							      <
+#define DMC0_TIMINGA_REF	0x50e				#define DMC0_TIMINGA_REF	0x50e
+#define DMC0_TIMING_ROW		0x14233287			#define DMC0_TIMING_ROW		0x14233287
+#define DMC0_TIMING_DATA	0x12130005			#define DMC0_TIMING_DATA	0x12130005
+#define	DMC0_TIMING_PWR		0x0E140222			#define	DMC0_TIMING_PWR		0x0E140222
+
+#define DMC1_TIMINGA_REF	0x618				#define DMC1_TIMINGA_REF	0x618
+#define DMC1_TIMING_ROW		0x11344309			#define DMC1_TIMING_ROW		0x11344309
+#define DMC1_TIMING_DATA	0x12130005			#define DMC1_TIMING_DATA	0x12130005
+#define	DMC1_TIMING_PWR		0x0E190222			#define	DMC1_TIMING_PWR		0x0E190222
+
+#endif								#endif
+
+
+#if defined(CONFIG_CLK_533_133_100_100)				#if defined(CONFIG_CLK_533_133_100_100)
+#define UART_UBRDIV_VAL		26				#define UART_UBRDIV_VAL		26
+#define UART_UDIVSLOT_VAL	0x0808				#define UART_UDIVSLOT_VAL	0x0808
+#else								#else
+#define UART_UBRDIV_VAL		34				#define UART_UBRDIV_VAL		34
+#define UART_UDIVSLOT_VAL	0xDDDD				#define UART_UDIVSLOT_VAL	0xDDDD
+#endif								#endif
+
+#define CONFIG_NR_DRAM_BANKS    2          /* we have 2 bank 	#define CONFIG_NR_DRAM_BANKS    2          /* we have 2 bank 
+#define SDRAM_BANK_SIZE         0x20000000    /* 512 MB */    |	#define SDRAM_BANK_SIZE         0x10000000    /* 256 MB */
+#define PHYS_SDRAM_1            MEMORY_BASE_ADDRESS /* SDRAM 	#define PHYS_SDRAM_1            MEMORY_BASE_ADDRESS /* SDRAM 
+#define PHYS_SDRAM_1_SIZE       SDRAM_BANK_SIZE			#define PHYS_SDRAM_1_SIZE       SDRAM_BANK_SIZE
+#define PHYS_SDRAM_2            (MEMORY_BASE_ADDRESS + SDRAM_ |	#define PHYS_SDRAM_2            MEMORY_BASE_ADDRESS2 /* SDRAM
+#define PHYS_SDRAM_2_SIZE       SDRAM_BANK_SIZE			#define PHYS_SDRAM_2_SIZE       SDRAM_BANK_SIZE
+
+#define CFG_FLASH_BASE		0x80000000		      <
+
+/*-----------------------------------------------------------	/*-----------------------------------------------------------
+ * FLASH and environment organization				 * FLASH and environment organization
+ */								 */
+#define CONFIG_MX_LV640EB		/* MX29LV640EB */     |	#define CFG_NO_FLASH
+//#define CONFIG_AMD_LV800		/* AM29LV800BB */     |	#undef	CONFIG_CMD_FLASH
+							      |	#undef	CONFIG_CMD_IMLS
+#define CFG_MAX_FLASH_BANKS	1	/* max number of memo <
+							      <
+#if	defined(CONFIG_MX_LV640EB)			      <
+#define CFG_MAX_FLASH_SECT	135			      <
+#define PHYS_FLASH_SIZE		0x800000	/* 8MB */     <
+#elif	defined(CONFIG_AMD_LV800)			      <
+#define CFG_MAX_FLASH_SECT	19			      <
+#define PHYS_FLASH_SIZE		0x100000	/* 1MB */     <
+#else							      <
+#define CFG_MAX_FLASH_SECT	512			      <
+#define PHYS_FLASH_SIZE		0x100000	/* 1MB */     <
+#endif							      <
+							      <
+#define CFG_FLASH_LEGACY_512Kx16			      <
+#define CONFIG_FLASH_CFI_LEGACY				      <
+#define CFG_FLASH_CFI					      <
+							      <
+/* timeout values are in ticks */			      <
+#define CFG_FLASH_ERASE_TOUT	(5*CFG_HZ) /* Timeout for Fla <
+#define CFG_FLASH_WRITE_TOUT	(5*CFG_HZ) /* Timeout for Fla <
+
+#define CFG_ENV_ADDR		0				#define CFG_ENV_ADDR		0
+#define CFG_ENV_SIZE		0x4000	/* Total Size of Envi	#define CFG_ENV_SIZE		0x4000	/* Total Size of Envi
+
+/*								/*
+ * SMDKC110 board specific data				      |	 * MANGO210 board specific data
+ */								 */
+
+#define CONFIG_IDENT_STRING	" for SMDKV210"		      |	#define CONFIG_IDENT_STRING	" for MANGO210"
+
+/* total memory required by uboot */				/* total memory required by uboot */
+#define CFG_UBOOT_SIZE		(2*1024*1024)		      |	#define CFG_UBOOT_SIZE		(3*1024*1024)
+
+ /* base address for uboot */					 /* base address for uboot */
+#ifdef CONFIG_ENABLE_MMU				      |	#define CFG_UBOOT_BASE		CFG_MEMTEST_END
+#define CFG_UBOOT_BASE		0xc3e00000		      <
+#else							      <
+#define CFG_UBOOT_BASE		0x23e00000		      <
+#endif							      <
+
+#define CFG_PHY_UBOOT_BASE	MEMORY_BASE_ADDRESS + 0x3e000 |	#define CFG_PHY_UBOOT_BASE	CFG_MEMTEST_END
+#define CFG_PHY_KERNEL_BASE	MEMORY_BASE_ADDRESS + 0x8000	#define CFG_PHY_KERNEL_BASE	MEMORY_BASE_ADDRESS + 0x8000
+
+#define CFG_ENV_OFFSET		0x0007C000			#define CFG_ENV_OFFSET		0x0007C000
+
+/* nand copy size from nand to DRAM.*/				/* nand copy size from nand to DRAM.*/
+#define	COPY_BL2_SIZE		0x80000				#define	COPY_BL2_SIZE		0x80000
+
+/* NAND configuration */					/* NAND configuration */
+#define CFG_MAX_NAND_DEVICE     1				#define CFG_MAX_NAND_DEVICE     1
+#define CFG_NAND_BASE           (0xE7200000)			#define CFG_NAND_BASE           (0xE7200000)
+#define NAND_MAX_CHIPS          1				#define NAND_MAX_CHIPS          1
+
+#define NAND_DISABLE_CE()	(NFCONT_REG |= (1 << 1))	#define NAND_DISABLE_CE()	(NFCONT_REG |= (1 << 1))
+#define NAND_ENABLE_CE()	(NFCONT_REG &= ~(1 << 1))	#define NAND_ENABLE_CE()	(NFCONT_REG &= ~(1 << 1))
+#define NF_TRANSRnB()		do { while(!(NFSTAT_REG & (1 	#define NF_TRANSRnB()		do { while(!(NFSTAT_REG & (1 
+
+#define CFG_NAND_SKIP_BAD_DOT_I	1  /* ".i" read skips bad blo	#define CFG_NAND_SKIP_BAD_DOT_I	1  /* ".i" read skips bad blo
+#define	CFG_NAND_WP		1				#define	CFG_NAND_WP		1
+#define CFG_NAND_YAFFS_WRITE	1  /* support yaffs write */	#define CFG_NAND_YAFFS_WRITE	1  /* support yaffs write */
+
+#define CFG_NAND_HWECC						#define CFG_NAND_HWECC
+#define CONFIG_NAND_BL1_8BIT_ECC				#define CONFIG_NAND_BL1_8BIT_ECC
+#undef	CFG_NAND_FLASH_BBT					#undef	CFG_NAND_FLASH_BBT
+
+/* IROM specific data */					/* IROM specific data */
+#define SDMMC_BLK_SIZE        (0xD003A500)			#define SDMMC_BLK_SIZE        (0xD003A500)
+#define COPY_SDMMC_TO_MEM     (0xD003E008)			#define COPY_SDMMC_TO_MEM     (0xD003E008)
+
+/* SD/MMC configuration */					/* SD/MMC configuration */
+#define CONFIG_MMC						#define CONFIG_MMC
+#define CONFIG_GENERIC_MMC					#define CONFIG_GENERIC_MMC
+#define CONFIG_S3C_HSMMC					#define CONFIG_S3C_HSMMC
+#undef DEBUG_S3C_HSMMC						#undef DEBUG_S3C_HSMMC
+
+/* The macro for MMC channel 0 is defined by default and can'	/* The macro for MMC channel 0 is defined by default and can'
+#define USE_MMC0						#define USE_MMC0
+#define USE_MMC2					      |	//#define USE_MMC1
+#define MMC_MAX_CHANNEL		4				#define MMC_MAX_CHANNEL		4
+
+/*								/*
+ * SD/MMC detection takes a little long time			 * SD/MMC detection takes a little long time
+ * So, you can ignore detection process for SD/MMC card		 * So, you can ignore detection process for SD/MMC card
+ */								 */
+#undef	CONFIG_NO_SDMMC_DETECTION				#undef	CONFIG_NO_SDMMC_DETECTION
+
+#define CONFIG_MTDPARTITION	"80000 400000 3000000"	      |	#define CONFIG_MTD_DEVICE
+							      >	#define CONFIG_MTD_PARTITIONS
+							      >	#define CONFIG_MTD_CONCAT
+							      >
+							      >	#define MTDIDS_DEFAULT		"nand0=s5pv210-nand"	/* te
+							      >	//#define MTDPARTS_DEFAULT	"mtdparts=s5pv210-nand:1m(boo
+							      >	#define MTDPARTS_DEFAULT	"mtdparts=s5pv210-nand:1m(boo
+
+/* OneNAND configuration */				      |	#define CONFIG_MTDPARTITION	"80000 400000 3000000"
+#define CFG_ONENAND_BASE 	(0xB0000000)		      <
+#define CFG_MAX_ONENAND_DEVICE	1			      <
+
+#define CONFIG_BOOT_ONENAND_IROM			      <
+#define CONFIG_NAND						#define CONFIG_NAND
+#define CONFIG_BOOT_NAND				      |	//#define CONFIG_BOOT_NAND
+#define CONFIG_ONENAND					      <
+#define ONENAND_REG_DBS_DFS_WIDTH 	(0x160)		      <
+#define ONENAND_REG_FLASH_AUX_CNTRL     (0x300)		      <
+
+#define GPNCON_OFFSET		0x830				#define GPNCON_OFFSET		0x830
+#define GPNDAT_OFFSET		0x834				#define GPNDAT_OFFSET		0x834
+#define GPNPUD_OFFSET		0x838				#define GPNPUD_OFFSET		0x838
+
+#define CFG_ENV_IS_IN_AUTO					#define CFG_ENV_IS_IN_AUTO
+
+/* Fastboot variables */					/* Fastboot variables */
+#define CFG_FASTBOOT_TRANSFER_BUFFER		(0x40000000)  |	#define CFG_FASTBOOT_TRANSFER_BUFFER		(MEMORY_BASE_
+#define CFG_FASTBOOT_TRANSFER_BUFFER_SIZE	(0x8000000)  	#define CFG_FASTBOOT_TRANSFER_BUFFER_SIZE	(0x8000000)  
+#define CFG_FASTBOOT_ADDR_KERNEL		(0xC0008000)  |	#define CFG_FASTBOOT_ADDR_KERNEL		(MEMORY_BASE_
+#define CFG_FASTBOOT_ADDR_RAMDISK		(0x30A00000)  |	#define CFG_FASTBOOT_ADDR_RAMDISK		(MEMORY_BASE_
+#define CFG_FASTBOOT_PAGESIZE			(2048)	// Pa	#define CFG_FASTBOOT_PAGESIZE			(2048)	// Pa
+#define CFG_FASTBOOT_SDMMC_BLOCKSIZE		(512)	// Bl	#define CFG_FASTBOOT_SDMMC_BLOCKSIZE		(512)	// Bl
+
+/* Just one BSP type should be defined. */			/* Just one BSP type should be defined. */
+//#define CFG_FASTBOOT_ONENANDBSP			      <
+#define CFG_FASTBOOT_NANDBSP					#define CFG_FASTBOOT_NANDBSP
+//#define CFG_FASTBOOT_SDMMCBSP					//#define CFG_FASTBOOT_SDMMCBSP
+
+/* LCD setting */						/* LCD setting */
+//#define CFG_LCD_TL2796		// for C110 - narrow  |	//#define CFG_LCD_TL2796			// for C110 -
+#define CFG_LCD_NONAME1			// for V210 - wide LC |	//#define CFG_LCD_NONAME1			// for V210 -
+							      >	#define CFG_LCD_LB070WV6
+#define CFG_LCD_FBUFFER				(0x48000000)	#define CFG_LCD_FBUFFER				(0x48000000)
+
+#define CONFIG_BOOTDELAY	3				#define CONFIG_BOOTDELAY	3
+#if defined(CFG_FASTBOOT_NANDBSP)			      |
+#define CONFIG_BOOTCOMMAND	"nand read C0008000 600000 40 |	#define CONFIG_BOOTCOMMAND	"nand read 20008000 80000 400
+#elif defined(CFG_FASTBOOT_SDMMCBSP)			      <
+#define CONFIG_BOOTCOMMAND	"movi read kernel C0008000; m <
+#endif							      <
+
+#endif	/* __CONFIG_H */					#endif	/* __CONFIG_H */
