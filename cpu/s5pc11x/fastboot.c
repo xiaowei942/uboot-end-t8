@@ -2539,7 +2539,7 @@ int fastboot_preboot(void)
 	}
 
 	/* Test code */
-	writel(0xF, 0xE1600000);
+/*	writel(0xF, 0xE1600000);
 	writel(readl(0xE1600010) | 0x1, 0xE1600010);
 
 	writel(0x33333333, 0xE0200C40);
@@ -2548,12 +2548,14 @@ int fastboot_preboot(void)
 	writel(0xAAAA, 0xE0200C68);
 
 	writel(readl(0xE1600008) & ~0xffff, 0xE1600008);
-
+*/
 	/* It seems that we require a little time before reading keypad */
 	printf("checking mode for fastboot ...\n");
 
-	//if (!(readl(0xE160000C) & 0x82))
-	if (!(readl(0xE160000C) & 0x80))
+	unsigned long val = readl(0xE0200C44);
+	//printf("%08lx\n",val);
+
+	if (!(val & 0x08))
 	{
 		return 1;
 	}
