@@ -35,6 +35,7 @@ COBJS-y += sed156x.o
 COBJS-y += sm501.o
 COBJS-y += smiLynxEM.o
 COBJS-y += videomodes.o
+COBJS-y += truly_fb.o start_logo.o
 
 COBJS	:= $(COBJS-y)
 SRCS	:= $(COBJS:.o=.c)

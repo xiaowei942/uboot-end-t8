@@ -1292,6 +1292,10 @@ static int video_init (void)
 	video_console_address = video_fb_address;
 #endif
 
+	read_logo_bin(CFG_LCD_FBUFFER_BK,0x100000,0x100000);
+	memcpy((void *)video_fb_address,(void *)CFG_LCD_FBUFFER_BK,VIDEO_SIZE);
+
+	backlight_on();
 	/* Initialize the console */
 	console_col = 0;
 	console_row = 0;
@@ -1313,6 +1317,7 @@ int drv_video_init (void)
 	if (video_init () == -1)
 		skip_dev_init = 1;
 
+#if 0
 #ifdef CONFIG_VGA_AS_SINGLE_DEVICE
 	/* Devices VGA and Keyboard will be assigned seperately */
 	/* Init vga device */
@@ -1350,6 +1355,7 @@ int drv_video_init (void)
 	}
 #endif /* CONFIG_VGA_AS_SINGLE_DEVICE */
 	/* No console dev available */
+#endif
 	return 0;
 }
 #endif /* CONFIG_CFB_CONSOLE */

@@ -602,11 +602,6 @@
 #define CFG_FASTBOOT_NANDBSP
 //#define CFG_FASTBOOT_SDMMCBSP
 
-/* LCD setting */
-//#define CFG_LCD_TL2796		// for C110 - narrow LCD
-#define CFG_LCD_NONAME1			// for V210 - wide LCD
-#define CFG_LCD_FBUFFER				(0x48000000)
-
 #define CONFIG_BOOTDELAY	3
 #if defined(CFG_FASTBOOT_NANDBSP)
 #define CONFIG_BOOTCOMMAND	"nand read C0008000 600000 400000; nand read 30A00000 B00000 180000; bootm C0008000 30A00000"
@@ -614,5 +609,21 @@
 #elif defined(CFG_FASTBOOT_SDMMCBSP)
 #define CONFIG_BOOTCOMMAND	"movi read kernel C0008000; movi read rootfs 30A00000 180000; bootm C0008000 30A00000"
 #endif
+
+/*------------------- LCD setting --------------------*/
+//#define CONFIG_VGA_AS_SINGLE_DEVICE
+#define CFG_LCD_FBUFFER				(0x2943a000)//(0x48000000)
+#define CFG_LCD_FBUFFER_BK				(0x2983a000)//(0x48000000)
+
+#define CONFIG_VIDEO_TRULY
+#define CONFIG_LCD_WIDTH 480
+#define CONFIG_LCD_HEIGHT 640
+#define BPP 16
+
+#define VIDEO_MEM_SIZE CONFIG_LCD_WIDTH*CONFIG_LCD_HEIGHT*BPP/8
+/* #define CONFIG_VIDEO_LOGO 1 */
+#define CONFIG_VIDEO 1
+#define CONFIG_CFB_CONSOLE 1
+/*----------------- LCD setting end -----------------*/
 
 #endif	/* __CONFIG_H */
