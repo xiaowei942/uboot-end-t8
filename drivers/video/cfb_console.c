@@ -515,7 +515,7 @@ static void video_drawchars (int xx, int yy, unsigned char *s, int count)
 
 /*****************************************************************************/
 
-static inline void video_drawstring (int xx, int yy, unsigned char *s)
+void video_drawstring (int xx, int yy, unsigned char *s)
 {
 	video_drawchars (xx, yy, s, strlen ((char *)s));
 }

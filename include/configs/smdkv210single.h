@@ -611,6 +611,7 @@
 #endif
 
 /*------------------- LCD setting --------------------*/
+#define VIDEO_FB_16BPP_PIXEL_SWAP 1
 //#define CONFIG_VGA_AS_SINGLE_DEVICE
 #define CFG_LCD_FBUFFER				(0x29431000)//(0x48000000)
 #define CFG_LCD_FBUFFER_BK				(0x29831000)//(0x48000000)

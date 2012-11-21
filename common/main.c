@@ -41,6 +41,8 @@
 #include <fastboot.h>
 #include <post.h>
 
+extern void video_drawstring (int xx, int yy, unsigned char *s);
+
 #if defined(CONFIG_SILENT_CONSOLE) || defined(CONFIG_POST) || defined(CONFIG_CMDLINE_EDITING)
 DECLARE_GLOBAL_DATA_PTR;
 #endif
@@ -342,8 +344,14 @@ void main_loop (void)
 #endif
 
 #ifdef CONFIG_FASTBOOT
-    if (fastboot_preboot())
+    if (fastboot_preboot()){
+
+	memset(0x29431000,0,480*640*2);
+	const char fastboot_string[] = "Welcome to fastboot";
+    	video_drawstring (10, 10, (uchar *)fastboot_string);
+
         run_command("fastboot", 0);
+    }
 #endif
 
 #ifdef CONFIG_PREBOOT
