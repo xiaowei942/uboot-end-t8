@@ -1291,11 +1291,16 @@ static int video_init (void)
 #else
 	video_console_address = video_fb_address;
 #endif
-	read_logo_bin(CFG_LCD_FBUFFER_BK,0x100000,0x100000);
 
 	if(start_fastboot)
 	{
+		udelay(750000);
 		memset((void*)CFG_LCD_FBUFFER_BK,0,VIDEO_SIZE);
+	}
+	else
+	{
+		udelay(150000);
+		read_logo_bin(CFG_LCD_FBUFFER_BK,0x100000,0x100000);
 	}
 	memcpy((void *)video_fb_address,(void *)CFG_LCD_FBUFFER_BK,VIDEO_SIZE);
 	backlight_on();
