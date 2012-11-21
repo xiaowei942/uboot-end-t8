@@ -346,7 +346,6 @@ void main_loop (void)
 #ifdef CONFIG_FASTBOOT
     if (fastboot_preboot()){
 
-	memset(0x29431000,0,480*640*2);
 	const char fastboot_string[] = "Welcome to fastboot";
     	video_drawstring (10, 10, (uchar *)fastboot_string);
 

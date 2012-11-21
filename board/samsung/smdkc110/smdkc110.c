@@ -59,6 +59,19 @@ static inline void delay(unsigned long loops)
 	__asm__ volatile ("1:\n" "subs %0, %1, #1\n" "bne 1b":"=r" (loops):"0"(loops));
 }
 
+int start_fastboot = 0;
+
+void if_start_fastboot()
+{
+	unsigned long val = readl(0xE0200C44);
+	//printf("%08lx\n",val);
+
+	if (!(val & 0x08))
+	{
+		start_fastboot = 1;
+	}
+}
+
 /*
  * Miscellaneous platform dependent initialisations
  */
@@ -116,6 +129,8 @@ static void smsc9220_pre_init(int bank_num)
 
 int board_init(void)
 {
+	if_start_fastboot();
+
 	DECLARE_GLOBAL_DATA_PTR;
 #ifdef CONFIG_DRIVER_SMC911X
 	smsc9220_pre_init(5);

@@ -2530,6 +2530,7 @@ int  fboot_usb_int_hndlr(void)
    ahead of the bootcmd
    Returns 0 to continue with normal u-boot flow
    Returns 1 to execute fastboot */
+extern int start_fastboot;
 int fastboot_preboot(void)
 {
 	if (memcmp((const char *)CFG_FASTBOOT_TRANSFER_BUFFER,
@@ -2551,14 +2552,9 @@ int fastboot_preboot(void)
 */
 	/* It seems that we require a little time before reading keypad */
 	printf("checking mode for fastboot ...\n");
-
-	unsigned long val = readl(0xE0200C44);
-	//printf("%08lx\n",val);
-
-	if (!(val & 0x08))
-	{
+	
+	if(start_fastboot)
 		return 1;
-	}
 
 	return 0;
 }

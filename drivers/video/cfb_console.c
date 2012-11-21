@@ -1222,7 +1222,7 @@ static void *video_logo (void)
 
 
 /*****************************************************************************/
-
+extern start_fastboot;
 static int video_init (void)
 {
 	unsigned char color8;
@@ -1291,11 +1291,15 @@ static int video_init (void)
 #else
 	video_console_address = video_fb_address;
 #endif
-
 	read_logo_bin(CFG_LCD_FBUFFER_BK,0x100000,0x100000);
-	memcpy((void *)video_fb_address,(void *)CFG_LCD_FBUFFER_BK,VIDEO_SIZE);
 
+	if(start_fastboot)
+	{
+		memset((void*)CFG_LCD_FBUFFER_BK,0,VIDEO_SIZE);
+	}
+	memcpy((void *)video_fb_address,(void *)CFG_LCD_FBUFFER_BK,VIDEO_SIZE);
 	backlight_on();
+
 	/* Initialize the console */
 	console_col = 0;
 	console_row = 0;
