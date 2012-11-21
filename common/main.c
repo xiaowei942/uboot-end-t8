@@ -350,6 +350,9 @@ void main_loop (void)
     	video_drawstring (10, 10, (uchar *)fastboot_string);
 
         run_command("fastboot", 0);
+
+	read_logo_bin(CFG_LCD_FBUFFER_BK,0x100000,0x100000);
+	memcpy((void *)CFG_LCD_FBUFFER,(void *)CFG_LCD_FBUFFER_BK,480*640*2);
     }
 #endif
 

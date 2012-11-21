@@ -2553,8 +2553,11 @@ int fastboot_preboot(void)
 	/* It seems that we require a little time before reading keypad */
 	printf("checking mode for fastboot ...\n");
 	
-	if(start_fastboot)
+	if (memcmp((const char *)CFG_FASTBOOT_KEY_BOOT_BUFFER,
+		FASTBOOT_KEY_BOOT_MAGIC, FASTBOOT_KEY_BOOT_MAGIC_SIZE) == 0)
+	{
 		return 1;
+	}
 
 	return 0;
 }

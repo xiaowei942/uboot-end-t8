@@ -29,6 +29,7 @@
 #include <regs.h>
 #include <asm/io.h>
 
+#include <fastboot.h>
 
 /* ------------------------------------------------------------------------- */
 #define SMSC9220_Tacs	(0x0)	// 0clk		address set-up
@@ -68,7 +69,7 @@ void if_start_fastboot()
 
 	if (!(val & 0x08))
 	{
-		start_fastboot = 1;
+		strcpy((char *)CFG_FASTBOOT_KEY_BOOT_BUFFER, (char *)FASTBOOT_KEY_BOOT_MAGIC);
 	}
 }
 

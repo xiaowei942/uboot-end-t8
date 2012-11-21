@@ -329,6 +329,7 @@ void	console_cursor (int state);
 #define PRINTD(x)
 #endif
 
+#include <fastboot.h>
 
 #ifdef CONFIG_CONSOLE_EXTRA_INFO
 extern void video_get_info_str (    /* setup a board string: type, speed, etc. */
@@ -1292,10 +1293,11 @@ static int video_init (void)
 	video_console_address = video_fb_address;
 #endif
 
-	if(start_fastboot)
+	memset((void*)CFG_LCD_FBUFFER_BK,0,VIDEO_SIZE);
+	if(memcmp((const char *)CFG_FASTBOOT_KEY_BOOT_BUFFER,
+		FASTBOOT_KEY_BOOT_MAGIC, FASTBOOT_KEY_BOOT_MAGIC_SIZE) == 0)
 	{
 		udelay(750000);
-		memset((void*)CFG_LCD_FBUFFER_BK,0,VIDEO_SIZE);
 	}
 	else
 	{
