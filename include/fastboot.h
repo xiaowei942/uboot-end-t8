@@ -224,10 +224,6 @@ struct fastboot_ptentry
 #define FASTBOOT_BOOT_NAME_SIZE 16
 #define FASTBOOT_BOOT_ARGS_SIZE 512
 
-/* Enable fastboot for pressing a key */
-#define FASTBOOT_KEY_BOOT_MAGIC "KEYBOOT"
-#define FASTBOOT_KEY_BOOT_MAGIC_SIZE 7
-
 /* Input of fastboot_tx_status */
 #define FASTBOOT_TX_ASYNC		0
 #define FASTBOOT_TX_SYNC		1

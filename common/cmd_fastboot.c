@@ -720,7 +720,6 @@ static int rx_handler (const unsigned char *buffer, unsigned int buffer_size)
 			if (!strcmp(cmdbuf + 6, "-bootloader"))
 			{
 				strcpy((char *)interface.transfer_buffer, (char *)FASTBOOT_REBOOT_MAGIC);
-				strcpy((char *)CFG_FASTBOOT_KEY_BOOT_BUFFER, (char *)FASTBOOT_KEY_BOOT_MAGIC);
 			}
 			else
 			{

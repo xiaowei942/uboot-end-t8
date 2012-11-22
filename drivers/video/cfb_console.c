@@ -1294,8 +1294,8 @@ static int video_init (void)
 #endif
 
 	memset((void*)CFG_LCD_FBUFFER_BK,0,VIDEO_SIZE);
-	if(memcmp((const char *)CFG_FASTBOOT_KEY_BOOT_BUFFER,
-		FASTBOOT_KEY_BOOT_MAGIC, FASTBOOT_KEY_BOOT_MAGIC_SIZE) == 0)
+	if(memcmp((const char *)CFG_FASTBOOT_TRANSFER_BUFFER,
+		FASTBOOT_REBOOT_MAGIC, FASTBOOT_REBOOT_MAGIC_SIZE) == 0)
 	{
 		udelay(750000);
 	}

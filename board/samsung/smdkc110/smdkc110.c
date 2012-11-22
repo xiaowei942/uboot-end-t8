@@ -69,7 +69,7 @@ void if_start_fastboot()
 
 	if (!(val & 0x08))
 	{
-		strcpy((char *)CFG_FASTBOOT_KEY_BOOT_BUFFER, (char *)FASTBOOT_KEY_BOOT_MAGIC);
+		strcpy((char *)CFG_FASTBOOT_TRANSFER_BUFFER, (char *)FASTBOOT_REBOOT_MAGIC);
 	}
 }
 
